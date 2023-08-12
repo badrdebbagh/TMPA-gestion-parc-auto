@@ -48,6 +48,7 @@ const VehSchema = new mongoose.Schema({
   Vignete: {
     type: String,
   },
+
   Collaborateur: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Collaborateur',

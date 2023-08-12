@@ -21,6 +21,23 @@ const defaultAdmine = require('./controllers/UserController');
 app.use('/api', router);
 defaultAdmine.createAdmin();
 
+const router10 = require('./Routes/UserRoute');
+const { getSelectedColumns } = require('./controllers/UserController');
+const authMiddleware = require('./middlewares/authMiddleware');
+app.use('/api', router10);
+app.get('/api/users/selected-columns', authMiddleware, async (req, res) => {
+  console.log("make api")
+  try {
+    const selectedColumns = await getSelectedColumns();
+    res.json(selectedColumns);
+  } catch (error) {
+    console.error('Error fetching selected columns:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+
 //IMPORT Collaborateur MODEL
 const router1 = require('./Routes/CollaborateurRoute');
 app.use('/api', router1);
@@ -30,7 +47,7 @@ const router2 = require('./Routes/VehiculeRoute');
 const { fetchVehicles } = require('./controllers/VehiculeController');
 
 app.use('/api', router2);
-app.get('/api/vehicles', async (req, res) => {
+app.get('/api/vehicle', async (req, res) => {
   try {
     const vehicles = await fetchVehicles();
     res.json(vehicles);
@@ -56,13 +73,7 @@ app.get('/api/archived-vehicule', async (req, res) => {
   }
 });
 // selected columns vehicules
-const UserController = require('./controllers/UserController');
-const authMiddleware = require('./middlewares/authMiddleware');
-app.use(
-  '/api/vehicule/save-columns',
-  authMiddleware,
-  UserController.saveColumnsHandler
-);
+
 
 /* Infractions */
 const router6 = require('./Routes/InfractionRoutes');
@@ -116,6 +127,7 @@ app.get('/api/archived-affectation', async (req, res) => {
 
 /* statistique */
 const router5 = require('./Routes/DashStatisRoute');
+
 
 app.use('/api', router5);
 

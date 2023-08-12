@@ -24,4 +24,5 @@ router2.put('/vehicule/:id', UpdateVehicule); /*  */
 /* delete vehicule */
 router2.delete('/vehicule/:id', DeleteVehicule); /*  */
 
+
 module.exports = router2;

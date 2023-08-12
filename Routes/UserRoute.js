@@ -7,6 +7,7 @@ const {
   DeleteUser,
   loginHandler,
   saveColumnsHandler,
+  getSelectedColumns,
 } = require('../controllers/UserController');
 const User = require('../models/Users');
 const authMiddleware = require('../middlewares/authMiddleware');
@@ -18,6 +19,14 @@ router.post('/users', AddUser);
 /* find all users */
 router.get('/users', FindAllUsers);
 
+
+
+
+/* login  */
+router.post('/login', loginHandler);
+router.post('/users/save-columns', authMiddleware, saveColumnsHandler);
+router.get('/users/selected-columns', authMiddleware, getSelectedColumns);
+
 /* find single user */
 router.get('/users/:id', FindSinglUser);
 
@@ -26,10 +35,6 @@ router.put('/users/:id', UpdateUser);
 
 /* delete user */
 router.delete('/users/:id', DeleteUser);
-
-/* login  */
-router.post('/login', loginHandler);
-router.post('/users/save-columns', authMiddleware, saveColumnsHandler);
 
 module.exports = router;
 
