@@ -21,6 +21,14 @@ const UserSchema = new mongoose.Schema(
       type: [String], // Array of column IDs that the user has selected to show
       default: [], // Default to an empty array
     },
+    collabSelectedColumns: {
+      type: [String], // Array of column IDs that the user has selected to show
+      default: [], // Default to an empty array
+    },
+    affectationSelectedColumns: {
+      type: [String], // Array of column IDs that the user has selected to show
+      default: [], // Default to an empty array
+    },
   },
   { timestamps: true }
 );

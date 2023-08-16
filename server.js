@@ -21,6 +21,7 @@ const defaultAdmine = require('./controllers/UserController');
 app.use('/api', router);
 defaultAdmine.createAdmin();
 
+//vehicules columns filter
 const router10 = require('./Routes/UserRoute');
 const { getSelectedColumns } = require('./controllers/UserController');
 const authMiddleware = require('./middlewares/authMiddleware');
@@ -29,6 +30,38 @@ app.get('/api/users/selected-columns', authMiddleware, async (req, res) => {
   console.log("make api")
   try {
     const selectedColumns = await getSelectedColumns();
+    res.json(selectedColumns);
+  } catch (error) {
+    console.error('Error fetching selected columns:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+//collaborateur columns filter
+const router11 = require('./Routes/UserRoute');
+const { getCollabSelectedColumns } = require('./controllers/UserController');
+
+app.use('/api', router11);
+app.get('/api/users/collab-selected-columns', authMiddleware, async (req, res) => {
+  console.log("make api")
+  try {
+    const selectedColumns = await getCollabSelectedColumns();
+    res.json(selectedColumns);
+  } catch (error) {
+    console.error('Error fetching selected columns:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+//affectation columns filter
+const router12 = require('./Routes/UserRoute');
+const { getAffectSelectedColumns } = require('./controllers/UserController');
+
+app.use('/api', router12);
+app.get('/api/users/affectation-selected-columns', authMiddleware, async (req, res) => {
+  console.log("make api")
+  try {
+    const selectedColumns = await getAffectSelectedColumns();
     res.json(selectedColumns);
   } catch (error) {
     console.error('Error fetching selected columns:', error);
