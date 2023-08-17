@@ -29,6 +29,10 @@ const UserSchema = new mongoose.Schema(
       type: [String], // Array of column IDs that the user has selected to show
       default: [], // Default to an empty array
     },
+    infractionSelectedColumns: {
+      type: [String], // Array of column IDs that the user has selected to show
+      default: [], // Default to an empty array
+    },
   },
   { timestamps: true }
 );

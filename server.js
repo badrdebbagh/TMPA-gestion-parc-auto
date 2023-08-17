@@ -68,6 +68,21 @@ app.get('/api/users/affectation-selected-columns', authMiddleware, async (req, r
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+//infraction columns filter
+const router13 = require('./Routes/UserRoute');
+const { getInfractionSelectedColumns } = require('./controllers/UserController');
+
+app.use('/api', router13);
+app.get('/api/users/infractions-selected-columns', authMiddleware, async (req, res) => {
+  console.log("make api")
+  try {
+    const selectedColumns = await getInfractionSelectedColumns();
+    res.json(selectedColumns);
+  } catch (error) {
+    console.error('Error fetching selected columns:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 
 

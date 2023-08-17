@@ -55,6 +55,8 @@ const FindSinglUser = async (req, res) => {
   }
 };
 
+
+
 const getSelectedColumns = async (req, res) => {
  
 
@@ -107,6 +109,56 @@ const saveColumnsHandler = (req, res) => {
 };
 
 //collaborateur filter columns
+
+const getInfractionSelectedColumns = async (req , res) => {
+  try {
+    const userId = req.user.id;
+    const user = await Users.findOne({_id:userId});
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+  // Respond with the user's selected columns
+    res.status(200).json({ infractionSelectedColumns: user.infractionSelectedColumns });
+  } catch (error) {
+    console.error('Error fetching selected columns:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+const saveInfractionColumnsHandler = (req, res) => {
+  console.log('Request Body:', req.body);
+  console.log('User ID from token:', req.user.id);
+  const userId = req.user.id;
+  console.log('User ID:', userId);
+
+  // Get the selectedColumns data from the request body
+  const { infractionSelectedColumns } = req.body;
+  console.log('Selected Columns:', infractionSelectedColumns);
+
+  // Update the user's record in the database with the new infractionSelectedColumns
+  Users.findByIdAndUpdate(userId, { infractionSelectedColumns }, { new: true })
+    .then((updatedUser) => {
+      if (!updatedUser) {
+        // User not found, handle the error
+        console.log('User not found');
+        return res.status(404).json({ error: 'User not found' });
+      }
+      // Return a success response
+      console.log('User updated successfully');
+      res
+        .status(200)
+        .json({ message: 'Selected columns updated successfully' });
+    })
+    .catch((err) => {
+      // Handle any errors that occurred during the update process
+      console.error('Error updating user:', err);
+      res
+        .status(500)
+        .json({ error: 'An error occurred while updating selected columns' });
+    });
+};
+
 
 const getCollabSelectedColumns = async (req, res) => {
  
@@ -326,6 +378,8 @@ module.exports = {
   getCollabSelectedColumns,
   getAffectSelectedColumns,
   saveAffectColumnsHandler,
+  getInfractionSelectedColumns,
+  saveInfractionColumnsHandler,
 };
 
 /* 
