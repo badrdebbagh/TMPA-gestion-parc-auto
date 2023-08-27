@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const UserSchema = new mongoose.Schema(
   {
     phone: {
@@ -17,6 +17,11 @@ const UserSchema = new mongoose.Schema(
     password: {
       type: String,
     },
+    isAdmin: {
+      type: Boolean,
+      default: false, // Set the default value to false for non-admin users
+    },
+
     selectedColumns: {
       type: [String], // Array of column IDs that the user has selected to show
       default: [], // Default to an empty array
@@ -37,5 +42,5 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const UserModel = mongoose.model('users', UserSchema);
+const UserModel = mongoose.model("users", UserSchema);
 module.exports = UserModel;

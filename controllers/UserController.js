@@ -1,13 +1,13 @@
-const Users = require('../models/Users');
-const ValidateUser = require('../Validation/UserValidation');
-const Validatelogin = require('../Validation/login');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const VehiculeModel = require('../models/Véhicule');
-const CollabModel = require('../models/Collaborateur');
+const Users = require("../models/Users");
+const ValidateUser = require("../Validation/UserValidation");
+const Validatelogin = require("../Validation/login");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const VehiculeModel = require("../models/Véhicule");
+const CollabModel = require("../models/Collaborateur");
 
 /* add work */
-const authMiddleware = require('../middlewares/authMiddleware');
+const authMiddleware = require("../middlewares/authMiddleware");
 
 const AddUser = async (req, res) => {
   const { errors, isValid } = ValidateUser(req.body);
@@ -17,7 +17,7 @@ const AddUser = async (req, res) => {
     } else {
       await Users.findOne({ email: req.body.email }).then(async (exist) => {
         if (exist) {
-          errors.email = 'User Exist';
+          errors.email = "User Exist";
           res.status(404).json(errors);
         } else {
           /* await Users.create(req.body); */
@@ -27,7 +27,7 @@ const AddUser = async (req, res) => {
           const newUser = new Users(user);
           await newUser.save();
           /* res.json(user)  */
-          res.status(201).json({ message: 'User added with success' });
+          res.status(201).json({ message: "User added with success" });
         }
       });
     }
@@ -55,212 +55,207 @@ const FindSinglUser = async (req, res) => {
   }
 };
 
-
-
 const getSelectedColumns = async (req, res) => {
- 
-
   try {
     const userId = req.user.id;
-    const user = await Users.findOne({_id:userId});
+    const user = await Users.findOne({ _id: userId });
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     // Respond with the user's selected columns
     res.status(200).json({ selectedColumns: user.selectedColumns });
   } catch (error) {
-    console.error('Error fetching selected columns:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error fetching selected columns:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
 const saveColumnsHandler = (req, res) => {
-  console.log('Request Body:', req.body);
-  console.log('User ID from token:', req.user.id);
+  console.log("Request Body:", req.body);
+  console.log("User ID from token:", req.user.id);
   const userId = req.user.id;
-  console.log('User ID:', userId);
+  console.log("User ID:", userId);
 
   // Get the selectedColumns data from the request body
   const { selectedColumns } = req.body;
-  console.log('Selected Columns:', selectedColumns);
+  console.log("Selected Columns:", selectedColumns);
 
   // Update the user's record in the database with the new selectedColumns
   Users.findByIdAndUpdate(userId, { selectedColumns }, { new: true })
     .then((updatedUser) => {
       if (!updatedUser) {
         // User not found, handle the error
-        console.log('User not found');
-        return res.status(404).json({ error: 'User not found' });
+        console.log("User not found");
+        return res.status(404).json({ error: "User not found" });
       }
       // Return a success response
-      console.log('User updated successfully');
+      console.log("User updated successfully");
       res
         .status(200)
-        .json({ message: 'Selected columns updated successfully' });
+        .json({ message: "Selected columns updated successfully" });
     })
     .catch((err) => {
       // Handle any errors that occurred during the update process
-      console.error('Error updating user:', err);
+      console.error("Error updating user:", err);
       res
         .status(500)
-        .json({ error: 'An error occurred while updating selected columns' });
+        .json({ error: "An error occurred while updating selected columns" });
     });
 };
 
 //collaborateur filter columns
 
-const getInfractionSelectedColumns = async (req , res) => {
+const getInfractionSelectedColumns = async (req, res) => {
   try {
     const userId = req.user.id;
-    const user = await Users.findOne({_id:userId});
+    const user = await Users.findOne({ _id: userId });
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
-  // Respond with the user's selected columns
-    res.status(200).json({ infractionSelectedColumns: user.infractionSelectedColumns });
+    // Respond with the user's selected columns
+    res
+      .status(200)
+      .json({ infractionSelectedColumns: user.infractionSelectedColumns });
   } catch (error) {
-    console.error('Error fetching selected columns:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error fetching selected columns:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
 const saveInfractionColumnsHandler = (req, res) => {
-  console.log('Request Body:', req.body);
-  console.log('User ID from token:', req.user.id);
+  console.log("Request Body:", req.body);
+  console.log("User ID from token:", req.user.id);
   const userId = req.user.id;
-  console.log('User ID:', userId);
+  console.log("User ID:", userId);
 
   // Get the selectedColumns data from the request body
   const { infractionSelectedColumns } = req.body;
-  console.log('Selected Columns:', infractionSelectedColumns);
+  console.log("Selected Columns:", infractionSelectedColumns);
 
   // Update the user's record in the database with the new infractionSelectedColumns
   Users.findByIdAndUpdate(userId, { infractionSelectedColumns }, { new: true })
     .then((updatedUser) => {
       if (!updatedUser) {
         // User not found, handle the error
-        console.log('User not found');
-        return res.status(404).json({ error: 'User not found' });
+        console.log("User not found");
+        return res.status(404).json({ error: "User not found" });
       }
       // Return a success response
-      console.log('User updated successfully');
+      console.log("User updated successfully");
       res
         .status(200)
-        .json({ message: 'Selected columns updated successfully' });
+        .json({ message: "Selected columns updated successfully" });
     })
     .catch((err) => {
       // Handle any errors that occurred during the update process
-      console.error('Error updating user:', err);
+      console.error("Error updating user:", err);
       res
         .status(500)
-        .json({ error: 'An error occurred while updating selected columns' });
+        .json({ error: "An error occurred while updating selected columns" });
     });
 };
 
-
 const getCollabSelectedColumns = async (req, res) => {
- 
-
   try {
     const userId = req.user.id;
-    const user = await Users.findOne({_id:userId});
+    const user = await Users.findOne({ _id: userId });
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     // Respond with the user's selected columns
     res.status(200).json({ collabSelectedColumns: user.collabSelectedColumns });
   } catch (error) {
-    console.error('Error fetching selected columns:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error fetching selected columns:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
 const saveCollabColumnsHandler = (req, res) => {
-  console.log('Request Body:', req.body);
-  console.log('User ID from token:', req.user.id);
+  console.log("Request Body:", req.body);
+  console.log("User ID from token:", req.user.id);
   const userId = req.user.id;
-  console.log('User ID:', userId);
+  console.log("User ID:", userId);
 
   // Get the selectedColumns data from the request body
   const { collabSelectedColumns } = req.body;
-  console.log('Selected Columns:', collabSelectedColumns);
+  console.log("Selected Columns:", collabSelectedColumns);
 
   // Update the user's record in the database with the new collabSelectedColumns
   Users.findByIdAndUpdate(userId, { collabSelectedColumns }, { new: true })
     .then((updatedUser) => {
       if (!updatedUser) {
         // User not found, handle the error
-        console.log('User not found');
-        return res.status(404).json({ error: 'User not found' });
+        console.log("User not found");
+        return res.status(404).json({ error: "User not found" });
       }
       // Return a success response
-      console.log('User updated successfully');
+      console.log("User updated successfully");
       res
         .status(200)
-        .json({ message: 'Selected columns updated successfully' });
+        .json({ message: "Selected columns updated successfully" });
     })
     .catch((err) => {
       // Handle any errors that occurred during the update process
-      console.error('Error updating user:', err);
+      console.error("Error updating user:", err);
       res
         .status(500)
-        .json({ error: 'An error occurred while updating selected columns' });
+        .json({ error: "An error occurred while updating selected columns" });
     });
 };
 
 //collaborateur filter columns
 
 const getAffectSelectedColumns = async (req, res) => {
- 
-
   try {
     const userId = req.user.id;
-    const user = await Users.findOne({_id:userId});
+    const user = await Users.findOne({ _id: userId });
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     // Respond with the user's selected columns
-    res.status(200).json({ affectationSelectedColumns: user.affectationSelectedColumns });
+    res
+      .status(200)
+      .json({ affectationSelectedColumns: user.affectationSelectedColumns });
   } catch (error) {
-    console.error('Error fetching selected columns:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error fetching selected columns:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
 const saveAffectColumnsHandler = (req, res) => {
-  console.log('Request Body:', req.body);
-  console.log('User ID from token:', req.user.id);
+  console.log("Request Body:", req.body);
+  console.log("User ID from token:", req.user.id);
   const userId = req.user.id;
-  console.log('User ID:', userId);
+  console.log("User ID:", userId);
 
   // Get the selectedColumns data from the request body
   const { affectationSelectedColumns } = req.body;
-  console.log('Selected Columns:', affectationSelectedColumns);
+  console.log("Selected Columns:", affectationSelectedColumns);
 
   // Update the user's record in the database with the new affectationSelectedColumns
   Users.findByIdAndUpdate(userId, { affectationSelectedColumns }, { new: true })
     .then((updatedUser) => {
       if (!updatedUser) {
         // User not found, handle the error
-        console.log('User not found');
-        return res.status(404).json({ error: 'User not found' });
+        console.log("User not found");
+        return res.status(404).json({ error: "User not found" });
       }
       // Return a success response
-      console.log('User updated successfully');
+      console.log("User updated successfully");
       res
         .status(200)
-        .json({ message: 'Selected columns updated successfully' });
+        .json({ message: "Selected columns updated successfully" });
     })
     .catch((err) => {
       // Handle any errors that occurred during the update process
-      console.error('Error updating user:', err);
+      console.error("Error updating user:", err);
       res
         .status(500)
-        .json({ error: 'An error occurred while updating selected columns' });
+        .json({ error: "An error occurred while updating selected columns" });
     });
 };
 //Update user
@@ -285,7 +280,7 @@ const UpdateUser = async (req, res) => {
 const DeleteUser = async (req, res) => {
   try {
     await Users.deleteOne({ _id: req.params.id });
-    res.status(201).json({ message: 'User deleted with success' });
+    res.status(201).json({ message: "User deleted with success" });
   } catch (error) {
     console.log(error.message);
   }
@@ -299,12 +294,12 @@ const loginHandler = async (req, res) => {
     } else {
       Users.findOne({ email: req.body.email }).then((user) => {
         if (!user) {
-          errors.email = 'not found user';
+          errors.email = "not found user";
           res.status(404).json(errors);
         } else {
           bcrypt.compare(req.body.password, user.password).then((isMatch) => {
             if (!isMatch) {
-              errors.password = 'incorrect password';
+              errors.password = "incorrect password";
               res.status(404).json(errors);
             } else {
               var token = jwt.sign(
@@ -314,15 +309,19 @@ const loginHandler = async (req, res) => {
                   firstname: user.firstname,
                   email: user.email,
                   phone: user.phone,
+                  isAdmin: user.isAdmin,
                   selectedColumns: user.selectedColumns,
+                  infractionSelectedColumns: user.infractionSelectedColumns,
+                  collabSelectedColumns: user.collabSelectedColumns,
+                  affectationSelectedColumns: user.affectationSelectedColumns,
                 },
                 process.env.PRIVATE_KEY
                 // { expiresIn: '6s' }
               );
 
               res.status(200).json({
-                message: 'success',
-                token: 'Bearer ' + token,
+                message: "success",
+                token: "Bearer " + token,
               });
             }
           });
@@ -337,11 +336,11 @@ const loginHandler = async (req, res) => {
 const createAdmin = async () => {
   try {
     const adminData = {
-      phone: '0123456789',
-      email: 'admin@tanger.med',
-      firstname: 'Admin',
-      lastname: 'User',
-      password: 'admintmpa',
+      phone: "0123456789",
+      email: "admin@tanger.med",
+      firstname: "Admin",
+      lastname: "User",
+      password: "admintmpa",
     };
 
     const hashedPassword = await bcrypt.hash(adminData.password, 10);
@@ -354,13 +353,13 @@ const createAdmin = async () => {
     const updatedAdmin = await Users.findOneAndUpdate(filter, update, options);
 
     if (updatedAdmin) {
-      console.log('Admin user created/updated successfully');
+      console.log("Admin user created/updated successfully");
       return updatedAdmin;
     } else {
-      console.log('Failed to create/update admin user');
+      console.log("Failed to create/update admin user");
     }
   } catch (error) {
-    console.error('Error creating/updating admin user:', error);
+    console.error("Error creating/updating admin user:", error);
   }
 };
 
