@@ -322,6 +322,19 @@ const loginHandler = async (req, res) => {
               res.status(200).json({
                 message: "success",
                 token: "Bearer " + token,
+                user: {
+                  // Include user details in the response
+                  id: user._id,
+                  lastname: user.lastname,
+                  firstname: user.firstname,
+                  email: user.email,
+                  phone: user.phone,
+                  isAdmin: user.isAdmin,
+                  selectedColumns: user.selectedColumns,
+                  infractionSelectedColumns: user.infractionSelectedColumns,
+                  collabSelectedColumns: user.collabSelectedColumns,
+                  affectationSelectedColumns: user.affectationSelectedColumns,
+                },
               });
             }
           });
@@ -341,6 +354,7 @@ const createAdmin = async () => {
       firstname: "Admin",
       lastname: "User",
       password: "admintmpa",
+      isAdmin: true,
     };
 
     const hashedPassword = await bcrypt.hash(adminData.password, 10);

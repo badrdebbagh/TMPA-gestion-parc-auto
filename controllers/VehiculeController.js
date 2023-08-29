@@ -1,8 +1,8 @@
-const VehiculeModel = require('../models/Véhicule');
-const ArchivedVehicule = require('../models/ArchivedVehicules');
-const ValidateVehicule = require('../Validation/VehiculeValidation');
+const VehiculeModel = require("../models/Véhicule");
+const ArchivedVehicule = require("../models/ArchivedVehicules");
+const ValidateVehicule = require("../Validation/VehiculeValidation");
 
-const excelJS = require('exceljs');
+const excelJS = require("exceljs");
 
 //add work
 const AddVehicule = async (req, res) => {
@@ -13,7 +13,7 @@ const AddVehicule = async (req, res) => {
     } else {
       await VehiculeModel.findOne({ WW: req.body.WW }).then(async (exist) => {
         if (exist) {
-          errors.WW = 'Vehicule Exist';
+          errors.WW = "Vehicule Exist";
           res.status(404).json(errors);
         } else {
           await VehiculeModel.create(req.body);
@@ -21,7 +21,7 @@ const AddVehicule = async (req, res) => {
           const newcollab= new CollabModel(collab);
           await newcollab.save();
           res.json(collab) */
-          res.status(201).json({ message: 'Vehicule added with success' });
+          res.status(201).json({ message: "Vehicule added with success" });
         }
       });
     }
@@ -62,7 +62,7 @@ const UpdateVehicule = async (req, res) => {
       /*  res.status(201).json(data); */
       res
         .status(201)
-        .json({ message: 'Vehicule Updated with success', data: data });
+        .json({ message: "Vehicule Updated with success", data: data });
     }
   } catch (error) {
     console.log(error.message);
@@ -75,7 +75,7 @@ const DeleteVehicule = async (req, res) => {
 
     // Check if the vehicle exists
     if (!vehicle) {
-      return res.status(404).json({ message: 'Vehicle not found' });
+      return res.status(404).json({ message: "Vehicle not found" });
     }
 
     // Create a new archived vehicle object with the data from the original vehicle
@@ -105,19 +105,19 @@ const DeleteVehicule = async (req, res) => {
     // Remove the vehicle from the main database
     await vehicle.deleteOne();
 
-    res.json({ message: 'Vehicle deleted and archived successfully' });
+    res.json({ message: "Vehicle deleted and archived successfully" });
   } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: "Server Error" });
   }
 };
 //fetch data
 const fetchVehicles = async () => {
   try {
-    const vehiculesCollection = db.collection('vehicules'); // Remplacez par le nom de votre collection
+    const vehiculesCollection = db.collection("vehicules"); // Remplacez par le nom de votre collection
     const vehicles = await vehiculesCollection.find().toArray();
     return vehicles;
   } catch (error) {
-    console.error('Error fetching vehicules:', error);
+    console.error("Error fetching vehicules:", error);
     throw error;
   }
 };
